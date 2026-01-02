@@ -1,0 +1,10 @@
+[package]
+name = "leetcode"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "p001"
+path = "src/lib.rs"
+test = true
+doctest = false
