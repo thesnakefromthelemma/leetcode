@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [lib]
-name = "p001"
+name = "leetcode"
 path = "src/lib.rs"
 test = true
 doctest = false

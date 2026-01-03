@@ -11,8 +11,8 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     inds.sort_unstable_by(|i0, i1| nums[*i0 as usize].cmp(&nums[*i1 as usize]));
 
     // Inward two-pointer search for values suumming to target
-    let mut lower: usize = 0;
-    let mut upper: usize = nums.len() - 1;
+    let mut lower = 0;
+    let mut upper = nums.len() - 1;
     while lower < upper {
         match (nums[inds[lower] as usize] + nums[inds[upper] as usize]).cmp(&target) {
             Equal => break,
