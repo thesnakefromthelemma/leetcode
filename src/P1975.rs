@@ -4,7 +4,7 @@ const MAX_SIZE: i64 = 100001;
 const MIN_SIZE: i64 = -100001;
 
 // Why do the fns always have the most fucked up types?
-pub fn max_matrix_sum(matrix: Vec<Vec<i32>>) -> i64 {
+pub fn max_matrix_sum(matrix: &Vec<Vec<i32>>) -> i64 {
     let mut neg_count = 0;
     let mut min_nonneg = MAX_SIZE;
     let mut max_neg = MIN_SIZE;
@@ -12,15 +12,15 @@ pub fn max_matrix_sum(matrix: Vec<Vec<i32>>) -> i64 {
 
     for row in matrix {
         for entry in row {
-            match 0.cmp(&entry) {
+            match 0.cmp(entry) {
                 Greater => {
                     neg_count += 1;
-                    max_neg = max(max_neg, entry as i64);
-                    abs_sum -= entry as i64;
+                    max_neg = max(max_neg, *entry as i64);
+                    abs_sum -= *entry as i64;
                 }
                 _ => {
-                    min_nonneg = min(min_nonneg, entry as i64);
-                    abs_sum += entry as i64;
+                    min_nonneg = min(min_nonneg, *entry as i64);
+                    abs_sum += *entry as i64;
                 }
             }
         }
@@ -38,13 +38,13 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(max_matrix_sum(vec![vec![1, -1], vec![-1, 1]]), 4)
+        assert_eq!(max_matrix_sum(&vec![vec![1, -1], vec![-1, 1]]), 4)
     }
 
     #[test]
     fn test2() {
         assert_eq!(
-            max_matrix_sum(vec![vec![1, 2, 3], vec![-1, -2, -3], vec![1, 2, 3]]),
+            max_matrix_sum(&vec![vec![1, 2, 3], vec![-1, -2, -3], vec![1, 2, 3]]),
             16
         )
     }

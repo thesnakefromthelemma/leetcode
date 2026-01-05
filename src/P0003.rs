@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-pub fn length_of_longest_substring(s: String) -> i32 {
+pub fn length_of_longest_substring(s: &str) -> i32 {
     // Assuming the argument consists entirely of ASCII characters
     // (That way we don't have to dick around with a HashWhatever
     // and fuck up cache locality by allocating all over the heap)
@@ -36,16 +36,16 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(length_of_longest_substring(String::from("abcabcbb")), 3);
+        assert_eq!(length_of_longest_substring("abcabcbb"), 3)
     }
 
     #[test]
     fn test2() {
-        assert_eq!(length_of_longest_substring(String::from("bbbbb")), 1);
+        assert_eq!(length_of_longest_substring("bbbbb"), 1)
     }
 
     #[test]
     fn test3() {
-        assert_eq!(length_of_longest_substring(String::from("pwwkew")), 3);
+        assert_eq!(length_of_longest_substring("pwwkew"), 3)
     }
 }
