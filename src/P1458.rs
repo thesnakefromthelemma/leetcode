@@ -3,7 +3,7 @@ use std::cmp::{max, min, Ordering::Less};
 const MAX_VAL: i32 = 1001;
 
 // Assumes 1 <= len0 <= len1
-pub fn max_dot_product(nums0: &Vec<i32>, nums1: &Vec<i32>) -> i32 {
+pub fn max_dot_product(nums0: &[i32], nums1: &[i32]) -> i32 {
     // For convenience
     let len0 = nums0.len();
     let len1 = nums1.len();
@@ -52,14 +52,14 @@ pub fn max_dot_product(nums0: &Vec<i32>, nums1: &Vec<i32>) -> i32 {
 }
 
 // Subperformant but wgaf--this case is an affront to god
-fn handle_empty(nums0: &Vec<i32>, nums1: &Vec<i32>) -> i32 {
+fn handle_empty(nums0: &[i32], nums1: &[i32]) -> i32 {
     let mut min0 = MAX_VAL;
-    for num in nums0 {
+    for &num in nums0 {
         min0 = min(min0, num.abs());
     }
 
     let mut min1 = MAX_VAL;
-    for num in nums1 {
+    for &num in nums1 {
         min1 = min(min1, num.abs());
     }
 
@@ -72,16 +72,19 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(max_dot_product(&vec![2, 1, -2, 5], &vec![3, 0, -6]), 18)
+        assert_eq!(
+            max_dot_product(&vec![2, 1, -2, 5][..], &vec![3, 0, -6][..]),
+            18
+        )
     }
 
     #[test]
     fn test2() {
-        assert_eq!(max_dot_product(&vec![3, -2], &vec![2, -6, 7]), 21)
+        assert_eq!(max_dot_product(&vec![3, -2][..], &vec![2, -6, 7][..]), 21)
     }
 
     #[test]
     fn test3() {
-        assert_eq!(max_dot_product(&vec![-1, -1], &vec![1, 1]), -1)
+        assert_eq!(max_dot_product(&vec![-1, -1][..], &vec![1, 1][..]), -1)
     }
 }

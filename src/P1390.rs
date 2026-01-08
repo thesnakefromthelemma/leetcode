@@ -10,10 +10,10 @@ const SMALL_PRIMES: [i32; 65] = [
 ];
 
 // Quite fast, but at what cost?
-pub fn sum_four_divisors(nums: Vec<i32>) -> i32 {
+pub fn sum_four_divisors(nums: &[i32]) -> i32 {
     let mut sum = 0;
 
-    for num in nums {
+    for &num in nums {
         // First we verify that num has at least 1 prime divisor
         if 1 < num {
             // Now we look for the smallest prime divisor of num
@@ -75,16 +75,16 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(sum_four_divisors(vec![21, 4, 7]), 32)
+        assert_eq!(sum_four_divisors(&vec![21, 4, 7][..]), 32)
     }
 
     #[test]
     fn test2() {
-        assert_eq!(sum_four_divisors(vec![21, 21]), 64)
+        assert_eq!(sum_four_divisors(&vec![21, 21][..]), 64)
     }
 
     #[test]
     fn test3() {
-        assert_eq!(sum_four_divisors(vec![1, 2, 3, 4, 5]), 0)
+        assert_eq!(sum_four_divisors(&vec![1, 2, 3, 4, 5][..]), 0)
     }
 }
