@@ -1,26 +1,11 @@
-use std::cmp::Ordering::Less;
-
-fn min_sat_val(num: i32) -> i32 {
-    let mut num_clone = num;
-    let mut count_sh = 0;
-    loop {
-        match num_clone & 1 {
-            0 => break,
-            _ => {
-                num_clone = num_clone >> 1;
-                count_sh += 1;
-            }
-        }
-    }
-    match 0.cmp(&count_sh) {
-        Less => num - (1 << (count_sh - 1)),
-        _ => -1,
-    }
-}
-
 pub fn min_bitwise_array(nums: &mut Vec<i32>) {
     for i in 0..nums.len() {
-        nums[i] = min_sat_val(nums[i]);
+        let num = nums[i];
+        let tzcnt = num.trailing_ones();
+        nums[i] = match (tzcnt as i32).is_positive() {
+            true => num - (1 << (tzcnt - 1)), // likely branch
+            false => -1,
+        }
     }
 }
 
