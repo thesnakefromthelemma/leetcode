@@ -1,9 +1,10 @@
+// What the fuck is the difference between this and P3314???
 pub fn min_bitwise_array(nums: &mut Vec<i32>) {
     for i in 0..nums.len() {
         let num = nums[i];
         let tocnt = num.trailing_ones();
         nums[i] = match (tocnt as i32).is_positive() {
-            true => num - (1 << (tocnt - 1)), // likely branch
+            true => num - (1 << (tocnt - 1)),
             false => -1,
         }
     }
