@@ -10,8 +10,9 @@
 // pub mod p1390;
 // pub mod p1411;
 // pub mod p1458;
-pub mod p1877;
+// pub mod p1877;
 // pub mod p1975;
+pub mod p1984;
 // pub mod p2943;
 // pub mod p2975;
 // pub mod p3047;
