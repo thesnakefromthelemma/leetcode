@@ -2,75 +2,34 @@ use std::cmp::{
     Ordering,
     Ordering::{Equal, Greater, Less},
 };
+use std::ops::Add;
 
-// Assumes 0 <= ind < heap.len()
-// No 'Copy' trait imposed on T, but still safe
-// (There results a minor missed optimization
-// opportunity due to the failure to pass 'val' around)
-fn min_heap_step_at_by<F: FnMut(&T, &T) -> Ordering, T>(
-    mut compare: F,
-    min_heap: &mut [T],
-    mut ind: usize,
-) {
-    let sze = min_heap.len();
-    loop {
-        match sze.cmp(&(2 * ind + 2)) {
-            Less => break,
-            Equal => {
-                let ind_left = 2 * ind + 1;
-                let val = &min_heap[ind];
-                let val_left = &min_heap[ind_left];
-                match compare(&val, &val_left) {
-                    Greater => {
-                        min_heap.swap(ind, ind_left);
-                        ind = ind_left;
-                    }
-                    _ => break,
-                }
-            }
-            Greater => {
-                let ind_left = 2 * ind + 1;
-                let ind_right = 2 * ind + 2;
-                let val = &min_heap[ind];
-                let val_left = &min_heap[ind_left];
-                let val_right = &min_heap[ind_left];
-                match (
-                    compare(val, val_left),
-                    compare(val, val_right),
-                    compare(val_left, val_right),
-                ) {
-                    (Greater, _, Less) => {
-                        min_heap.swap(ind, ind_left);
-                        ind = ind_left;
-                    }
-                    (_, Greater, _) => {
-                        min_heap.swap(ind, ind_right);
-                        ind = ind_right;
-                    }
-                    _ => break,
-                }
-            }
-        }
-    }
+struct Ref {
+    head: usize,
+    tail: usize,
 }
 
-struct Node<T> {
+struct Link<T> {
     val: T,
     next: usize,
 }
 
+#[derive(Clone)]
+#[derive(Copy)]
 struct Pair<T> {
     fst: T,
     snd: T,
     ind: usize,
 }
 
-pub fn minimum_pair_removal(nums: &[i32]) -> i32 {
-    let mut count_inv: u32 = 0;
-    let mut count_rem = 0;
-
+// Assumes 0 <= ind < min_heap.len()
+fn min_heap_step_at<T: Copy + Ord + Add<Output = T>>(
+    ref_list: &mut [Ref],
+    min_heap: &mut [Pair<T>],
+    mut ind: usize,
+) {
     // Comparison for pairs
-    let compare = |p0: &Pair<i32>, p1: &Pair<i32>| {
+    let compare = |p0: &Pair<T>, p1: &Pair<T>| {
         let naive = (p0.fst + p0.snd).cmp(&(p1.fst + p1.snd));
         match naive {
             Equal => p0.ind.cmp(&p1.ind),
@@ -78,10 +37,69 @@ pub fn minimum_pair_removal(nums: &[i32]) -> i32 {
         }
     };
 
+    // Heapification withg reference update
+    let sze = min_heap.len();
+    let val = min_heap[ind];
+    loop {
+        match sze.cmp(&(2 * ind + 2)) {
+            Less => {
+                min_heap[ind] = val;
+                break;
+            },
+            Equal => {
+                let ind_left = 2 * ind + 1;
+                let val_left = min_heap[ind_left];
+                match compare(&val, &val_left) {
+                    Greater => {
+                        min_heap[ind] = val_left;
+                        ind = ind_left;
+                    }
+                    _ => {
+                        min_heap[ind] = val;
+                        break;
+                    }
+                }
+            }
+            Greater => {
+                let ind_left = 2 * ind + 1;
+                let ind_right = 2 * ind + 2;
+                let val_left = min_heap[ind_left];
+                let val_right = min_heap[ind_left];
+                match (
+                    compare(&val, &val_left),
+                    compare(&val, &val_right),
+                    compare(&val_left, &val_right),
+                ) {
+                    (Greater, _, Less) => {
+                        min_heap[ind] = val_left;
+                        ind = ind_left;
+                    }
+                    (_, Greater, _) => {
+                        min_heap[ind] = val_right;
+                        ind = ind_right;
+                    }
+                    _ => {
+                        min_heap[ind] = val;
+                        let ref_head = val.fst;
+                        let ref_tail = val.snd;
+                        ref_list[ref_head].head = ind;
+                        ref_list[ref_tail].tail = ind;                        
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+pub fn minimum_pair_removal(nums: &[i32]) -> i32 {
+    let mut count_inv: u32 = 0;
+    let mut count_rem = 0;
+
     // Allocate and construct link_list
     let mut link_list = Vec::with_capacity(nums.len());
     for i in 0..(nums.len() - 1) {
-        link_list.push(Node {
+        link_list.push(Link {
             next: i + 1,
             val: nums[i],
         });
@@ -109,7 +127,7 @@ pub fn minimum_pair_removal(nums: &[i32]) -> i32 {
     let mut i = min_heap.len() / 2;
     while i > 0 {
         i -= 1;
-        min_heap_step_at_by(compare, &mut min_heap[..], i);
+        // min_heap_step_at(&mut min_heap[..], i);
     }
 
     // Fuse minimal pairs while unsorted

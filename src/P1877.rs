@@ -1,7 +1,7 @@
 use std::cmp::max;
 
 pub fn min_pair_sum(mut nums: Vec<i32>) -> i32 {
-    nums.sort();
+    nums.sort_unstable();
     let mut max_sum = 2;
     for i in 0..(nums.len() / 2) {
         max_sum = max(max_sum, nums[i] + nums[nums.len() - 1 - i]);

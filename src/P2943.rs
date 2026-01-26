@@ -7,7 +7,7 @@ pub fn maximize_square_hole_area(
     mut h_bars: Vec<i32>,
     mut v_bars: Vec<i32>,
 ) -> i32 {
-    h_bars.sort();
+    h_bars.sort_unstable();
     let mut max_stretch_h = 1;
     let mut cur_stretch_h = 2;
     for i in 1..h_bars.len() {
@@ -21,7 +21,7 @@ pub fn maximize_square_hole_area(
     }
     max_stretch_h = max(max_stretch_h, cur_stretch_h);
 
-    v_bars.sort();
+    v_bars.sort_unstable();
     let mut max_stretch_v = 1;
     let mut cur_stretch_v = 2;
     for i in 1..v_bars.len() {

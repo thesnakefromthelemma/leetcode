@@ -4,7 +4,7 @@ use std::cmp::min;
 const MAX_DIFF: i32 = 100_001;
 
 pub fn minimum_difference(mut nums: Vec<i32>, k: usize) -> i32 {
-    nums.sort();
+    nums.sort_unstable();
 
     let mut min_diff = MAX_DIFF;
     for i in 0..(nums.len() - k + 1) {

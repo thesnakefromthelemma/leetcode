@@ -34,7 +34,7 @@ fn maximize_square_area_internal(
     // Cache horizontal distances
     h_fences.push(1);
     h_fences.push(h_max);
-    h_fences.sort();
+    h_fences.sort_unstable();
     let mut cache = vec![];
     // 0 == i0
     for i0 in 0..h_fences.len() {
@@ -42,14 +42,14 @@ fn maximize_square_area_internal(
             cache.push(h_fences[i1] - h_fences[i0]);
         }
     }
-    cache.sort();
+    cache.sort_unstable();
 
     let mut side_max = 0;
 
     // Search for vertical distances in cache
     v_fences.push(1);
     v_fences.push(v_max);
-    v_fences.sort();
+    v_fences.sort_unstable();
     // 0 == i0
     for i0 in 0..v_fences.len() {
         for i1 in (i0 + 1)..v_fences.len() {
